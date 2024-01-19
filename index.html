@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REY Watching Site</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: block;
+            height: 0.5in;
+            background-color: #333;
+            color: #fff;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar {
+            width: 200px;
+            padding: 5px;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .search-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #videoPlayerArea {
+            width: 100%;
+            height: 220px;
+            border-radious:8px;
+            background-color: #333;
+            color: #fff;
+            display: none;
+            overflow: hidden;
+            padding-bottom: 30px;
+            transition: transform 0.5s;
+        }
+    #videoPlayerArea.landscape-mode {
+    transform: rotate(90deg);
+    width: 100vh;
+    height: 100vw;
+    top: calc(50% - 50vw);
+    left: calc(50% - 50vh);
+}
+
+        #videoPlayer {
+            width: 100%;
+            height: 100%;
+        }
+  
+
+        #thumbnails {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .thumbnail {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #ddd;
+            margin: 0 15px 15px 0;
+            overflow: hidden;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        .video-name {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            box-sizing: border-box;
+            border-radius: 0 0 8px 8px;
+            font-size: 12px;
+            text-align: center;
+        }
+  footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>REY TV</div>
+        <input type="text" id="searchBar" class="search-bar" placeholder="Search">
+        <button class="search-button">Search</button>
+    </header>
+  <div id="videoPlayerArea">
+    <button id="closeButton" onclick="closeVideoPlayer()">Close</button>
+    <video controls id="videoPlayer"></video>
+</div>
+   <div id="videoPlayerArea">
+        <video controls id="videoPlayer"></video>
+    </div>
+  
+
+    <div id="thumbnails">
+        <!-- Thumbnails will be dynamically added here -->
+    </div>
+  <footer>
+        &copy; 2024 REY WATCH All rights reserved.
+    </footer>
+
+    <script>
+        // Array of video sources and corresponding names
+        var videos = [
+            { src: 'https://raw.githubusercontent.com/reymr1322/watch/master/VID-20231215-WA0022.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail1.jpg', name: 'Video 1' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video2.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail2.jpg', name: 'Video 2' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video3.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail3.jpg', name: 'Video 3' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video4.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail4.jpg', name: 'Video 4' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video1.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail1.jpg', name: 'Video 1' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video2.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail2.jpg', name: 'Video 2' },
+             { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video1.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail1.jpg', name: 'Video 1' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video2.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail2.jpg', name: 'Video 2' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video3.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail3.jpg', name: 'Video 3' },
+           { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video1.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail1.jpg', name: 'Video 1' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video2.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail2.jpg', name: 'Video 2' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video3.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail3.jpg', name: 'Video 3' },
+           { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video1.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail1.jpg', name: 'Video 1' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video2.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail2.jpg', name: 'Video 2' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video3.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail3.jpg', name: 'Video 3' },
+           { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video1.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail1.jpg', name: 'Video 1' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video2.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail2.jpg', name: 'Video 2' },
+            { src: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/video3.mp4', thumbnail: 'https://raw.githubusercontent.com/yourusername/yourrepository/master/thumbnail3.jpg', name: 'Video 3' },
+           
+            // Add more videos as needed
+        ];
+
+        var thumbnailsContainer = document.getElementById('thumbnails');
+        var videoPlayerArea = document.getElementById('videoPlayerArea');
+        var videoPlayer = document.getElementById('videoPlayer');
+
+        // Dynamically create thumbnails for each video
+        videos.forEach(function (video) {
+            var thumbnail = document.createElement('div');
+            thumbnail.className = 'thumbnail';
+
+            var thumbnailImg = document.createElement('img');
+            thumbnailImg.src = video.thumbnail;
+            thumbnail.appendChild(thumbnailImg);
+
+            var videoName = document.createElement('p');
+            videoName.className = 'video-name';
+            videoName.innerText = video.name;
+            thumbnail.appendChild(videoName);
+
+            thumbnail.addEventListener('click', function () {
+                videoPlayer.src = video.src;
+                videoPlayerArea.style.display = 'block';
+                videoPlayer.play();
+            });
+
+            thumbnailsContainer.appendChild(thumbnail);
+        });
+
+        document.getElementById('searchBar').addEventListener('input', function () {
+            var searchTerm = this.value.toLowerCase();
+
+            var thumbnails = document.getElementsByClassName('thumbnail');
+
+            for (var i = 0; i < thumbnails.length; i++) {
+                var videoName = thumbnails[i].getElementsByClassName('video-name')[0].innerText.toLowerCase();
+                if (videoName.includes(searchTerm)) {
+                    thumbnails[i].style.display = 'flex';
+                } else {
+                    thumbnails[i].style.display = 'none';
+                }
+            }
+              
+        });
+  function closeVideoPlayer() {
+            videoPlayer.pause();
+            videoPlayerArea.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            window.location.href = 'index.html'; // Replace with your index page URL
+        }
+  // Function to handle orientation change
+function handleOrientationChange() {
+    var videoPlayerArea = document.getElementById('videoPlayerArea');
+    var videoPlayer = document.getElementById('videoPlayer');
+
+    // Check if the device is in landscape mode
+    if (window.innerWidth > window.innerHeight) {
+        videoPlayerArea.classList.add('landscape-mode');
+    } else {
+        videoPlayerArea.classList.remove('landscape-mode');
+    }
+}
+
+// Attach the event listener
+window.addEventListener('orientationchange', handleOrientationChange);
+
+// Call the function initially to set the initial orientation
+handleOrientationChange();
+
+    </script>
+</body>
+</html>
