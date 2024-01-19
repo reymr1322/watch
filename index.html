@@ -47,15 +47,9 @@
             display: none;
             overflow: hidden;
             padding-bottom: 30px;
-            transition: transform 0.5s;
+            
         }
-    #videoPlayerArea.landscape-mode {
-    transform: rotate(90deg);
-    width: 100vh;
-    height: 100vw;
-    top: calc(50% - 50vw);
-    left: calc(50% - 50vh);
-}
+  
 
         #videoPlayer {
             width: 100%;
@@ -117,10 +111,11 @@
         <input type="text" id="searchBar" class="search-bar" placeholder="Search">
         <button class="search-button">Search</button>
     </header>
-  <div id="videoPlayerArea">
+ <div id="videoPlayerArea">
     <button id="closeButton" onclick="closeVideoPlayer()">Close</button>
     <video controls id="videoPlayer"></video>
 </div>
+
    <div id="videoPlayerArea">
         <video controls id="videoPlayer"></video>
     </div>
@@ -206,25 +201,40 @@
             document.body.style.overflow = 'auto';
             window.location.href = 'index.html'; // Replace with your index page URL
         }
-  // Function to handle orientation change
-function handleOrientationChange() {
-    var videoPlayerArea = document.getElementById('videoPlayerArea');
-    var videoPlayer = document.getElementById('videoPlayer');
-
-    // Check if the device is in landscape mode
-    if (window.innerWidth > window.innerHeight) {
-        videoPlayerArea.classList.add('landscape-mode');
-    } else {
-        videoPlayerArea.classList.remove('landscape-mode');
-    }
-}
-
-// Attach the event listener
-window.addEventListener('orientationchange', handleOrientationChange);
-
-// Call the function initially to set the initial orientation
-handleOrientationChange();
-
+  
     </script>
+  <script>
+    // ... (your existing script)
+
+    function rotateVideo() {
+        var currentRotation = videoPlayer.getAttribute("data-rotate") || 0;
+        currentRotation = (parseInt(currentRotation) + 90) % 360;
+
+        videoPlayer.setAttribute("data-rotate", currentRotation);
+        videoPlayer.style.transform = "rotate(" + currentRotation + "deg)";
+    }
+
+    // Add event listener for orientation change
+    window.addEventListener("orientationchange", handleOrientationChange);
+
+    function handleOrientationChange() {
+        // Check if the device is in landscape mode
+        if (window.orientation === 90 || window.orientation === -90) {
+            // Request fullscreen mode
+            if (videoPlayerArea.requestFullscreen) {
+                videoPlayerArea.requestFullscreen();
+            } else if (videoPlayerArea.mozRequestFullScreen) { // Firefox
+                videoPlayerArea.mozRequestFullScreen();
+            } else if (videoPlayerArea.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                videoPlayerArea.webkitRequestFullscreen();
+            } else if (videoPlayerArea.msRequestFullscreen) { // IE/Edge
+                videoPlayerArea.msRequestFullscreen();
+            }
+        }
+    }
+
+    // ... (your existing script)
+</script>
+
 </body>
 </html>
